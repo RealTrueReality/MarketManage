@@ -1,0 +1,19 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: SuperMarketManage
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root
+      password: 1234
+      url: jdbc:mysql://localhost:3306/supermarket?useSSL=false&allowPublicKeyRetrieval=true
+mybatis-plus:
+  configuration:
+    #???????????????????????????????????????
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: ASSIGN_ID
