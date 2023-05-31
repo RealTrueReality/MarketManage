@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../../plugins/element-ui/index.css"/>
+    <link rel="stylesheet" href="../../styles/common.css"/>
+    <link rel="stylesheet" href="../../styles/page.css"/>
+</head>
+<body>
+<div class="addBrand-container" id="purchase-add-app">
+    <div class="container">
+        <el-form
+                ref="ruleForm"
+                :model="ruleForm"
+                :rules="rules"
+                :inline="false"
+                label-width="180px"
+                class="demo-ruleForm"
+        >
+            <!--        <el-form-item label="姓名:" prop="empName">-->
+            <!--          <el-input v-model="ruleForm.empName" placeholder="请输入姓名" maxlength="20"/>-->
+            <!--        </el-form-item>-->
+            <el-form-item
+                    label="采购订单号:"
+                    prop="purchaseNo"
+            >
+                <el-input
+                        v-model="ruleForm.purchaseNo"
+                        placeholder="采购订单号"
+                        maxlength="20"
+                />
+            </el-form-item>
+
+
+            <el-form-item
+                    label="供应商编号:"
+                    prop="supplierId"
+            >
+                <el-input
+                        v-model="ruleForm.supplierId"
+                        placeholder="请输入供应商编号"
+                        maxlength="30"
+                />
+            </el-form-item>
+            <el-form-item
+                    label="采购日期:"
+                    prop="purchaseDate"
+            >
+                <el-date-picker
+                        v-model="ruleForm.purchaseDate"
+                        type="date"
+                        value-format="yyyy-MM-dd"
+                        placeholder="选择日期">
+
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item
+                    label="商品编号:"
+                    prop="prodId"
+            >
+                <el-input
+                        v-model="ruleForm.prodId"
+                        placeholder="请输入商品编号"
+                        maxlength="12"
+                />
+            </el-form-item>
+
+            <el-form-item
+                    label="采购数量:"
+                    prop="purchaseQuantity"
+            >
+                <el-input
+                        v-model="ruleForm.purchaseQuantity"
+                        placeholder="请输入采购数量"
+                        maxlength="20"
+                />
+            </el-form-item>
+            <el-form-item
+                    label="采购总价:"
+                    prop="purchasePrice"
+            >
+                <el-input
+                        v-model="ruleForm.purchasePrice"
+                        placeholder="请输入采购总价"
+                        maxlength="20"
+                />
+            </el-form-item>
+
+            <div class="subBox address">
+                <el-form-item>
+                    <el-button @click="goBack()">
+                        取消
+                    </el-button>
+                    <el-button
+                            type="primary"
+                            @click="submitForm('ruleForm', false)"
+                    >
+                        保存
+                    </el-button>
+                    <el-button
+                            v-if="actionType == 'add'"
+                            type="primary"
+                            class="continue"
+                            @click="submitForm('ruleForm', true)"
+                    >
+                        保存并继续添加
+                    </el-button>
+                </el-form-item>
+            </div>
+        </el-form>
+    </div>
+</div>
+<!-- 开发环境版本，包含了有帮助的命令行警告 -->
+<script src="../../plugins/vue/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="../../plugins/element-ui/index.js"></script>
+<!-- 引入axios -->
+<script src="../../plugins/axios/axios.min.js"></script>
+<script src="../../js/request.js"></script>
+<script src="../../api/purchase.js"></script>
+<script src="../../js/validate.js"></script>
+<script src="../../js/index.js"></script>
+<script>
+    new Vue({
+        el: '#purchase-add-app',
+        data() {
+            return {
+                id: '',
+                actionType: '',
+                ruleForm: {
+                    'purchaseNo': '',
+                    'purchaseDate': '',
+                    'supplierId': '',
+                    'prodId': '',
+                    'purchaseQuantity': '',
+                    'purchasePrice': ''
+
+                }
+            }
+        },
+        computed: {
+            rules() {
+                return true
+            }
+        },
+        created() {
+            this.id = requestUrlParam('id')
+            this.actionType = this.id ? 'edit' : 'add'
+            if (this.id) {
+                this.init()
+            }
+        },
+        mounted() {
+        },
+        methods: {
+            async init() {
+                queryPurchaseById(this.id).then(res => {
+                    console.log(res)
+                    if (String(res.code) === '1') {
+                        console.log(res.data)
+                        this.ruleForm = res.data
+                        // this.ruleForm.sex = res.data.sex === '0' ? '女' : '男'
+                        // this.ruleForm.password = ''
+                    } else {
+                        this.$message.error(res.msg || '操作失败')
+                    }
+                })
+            },
+            submitForm(formName, st) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        if (this.actionType === 'add') {
+                            const params = {
+                                ...this.ruleForm,
+                                // sex: this.ruleForm.sex === '女' ? '0' : '1'
+                            }
+                            addPurchase(params).then(res => {
+                                if (res.code === 1) {
+                                    this.$message.success('采购信息添加成功！')
+                                    if (!st) {
+                                        this.goBack()
+                                    } else {
+                                        this.ruleForm = {
+                                            'purchaseNo': '',
+                                            'purchaseDate': '',
+                                            'supplierId': '',
+                                            'prodId': '',
+                                            'purchaseQuantity': '',
+                                            'purchasePrice': ''
+                                        }
+                                    }
+                                } else {
+                                    this.$message.error(res.msg || '操作失败')
+                                }
+                            }).catch(err => {
+                                this.$message.error('请求出错了：' + err)
+                            })
+                        } else {
+                            const params = {
+                                ...this.ruleForm,
+                                // sex: this.ruleForm.sex === '女' ? '0' : '1'
+                            }
+
+
+                            editPurchase(params).then(res => {
+                                if (res.code === 1) {
+                                    this.$message.success('采购信息修改成功！')
+                                    this.goBack()
+                                } else {
+                                    this.$message.error(res.msg || '操作失败')
+                                }
+                            }).catch(err => {
+                                this.$message.error('请求出错了：' + err)
+                            })
+                        }
+                    } else {
+                        console.log('error submit!!')
+                        return false
+                    }
+                })
+            },
+            goBack() {
+                window.parent.menuHandle({
+                    id: '2',
+                    url: '/page/purchase/list.html',
+                    name: '采购'
+                }, false)
+            }
+        }
+    })
+</script>
+</body>
+</html>
