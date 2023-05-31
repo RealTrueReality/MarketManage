@@ -58,7 +58,7 @@ public class SalesController {
     public Result<Sales> getSalesById(@PathVariable Long id) {
         Sales salesGotById = salesService.getById(id);
         if (salesGotById == null) {
-            return Result.error("找不到这个客户哦~~");
+            return Result.error("找不到这个销售信息哦~~");
         } else {
             return Result.success(salesGotById);
         }

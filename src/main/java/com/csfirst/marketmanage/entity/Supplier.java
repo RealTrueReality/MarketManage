@@ -12,7 +12,6 @@ import lombok.Data;
  */
 @Data
 @TableName("supplier_info")
-
 public class Supplier {
     @TableId(type = IdType.ASSIGN_ID)
 
