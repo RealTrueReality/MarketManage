@@ -22,8 +22,10 @@ public class Sales {
     private int salesId;
     private String salesNo;
     private LocalDate salesDate;
-    private int custId;
-    private int prodId;
+    //将会在Service中变为顾客姓名
+    private String custId;
+    //将会在Service中变为商品名称
+    private String prodId;
     private int salesQuantity;
     private BigDecimal salesPrice;
 }
