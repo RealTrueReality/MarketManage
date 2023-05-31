@@ -31,9 +31,9 @@
     <div class="app-wrapper openSidebar clearfix">
         <!-- sidebar -->
         <div class="sidebar-container">
-            <div class="logo">
-                <!-- <img src="images/logo.png" width="122.5" alt="" /> -->
-                <!--            <img src="images/login/login-logo.png" alt="" style="width: 117px; height: 32px" />-->
+            <div class="sizedBox">
+                <img width="122.5" alt=""/>
+
             </div>
 
             <el-scrollbar wrap-class="scrollbar-wrapper">
@@ -79,11 +79,7 @@
               >
                     <span>{{headTitle}}</span>
                 </div>
-                <div class="right-menu">
-                    <!--                    <div class="avatar-wrapper">{{ userInfo.name }}</div>-->
-                    <!--                    &lt;!&ndash; <div class="logout" @click="logout">退出</div> &ndash;&gt;-->
-                    <!--                    <img src="images/icons/btn_close@2x.png" class="outLogin" alt="退出" @click="logout"/>-->
-                </div>
+
             </div>
             <div class="app-main" v-loading="loading">
                 <div class="divTmp" v-show="loading"></div>
@@ -108,7 +104,7 @@
 <!-- 引入axios -->
 <script src="plugins/axios/axios.min.js"></script>
 <script src="js/request.js"></script>
-<script src="./api/login.js"></script>
+
 <script>
 
     new Vue({
