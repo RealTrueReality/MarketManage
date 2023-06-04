@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.csfirst.marketmanage.common.Result;
 import com.csfirst.marketmanage.entity.Purchase;
+import com.csfirst.marketmanage.service.ProductService;
 import com.csfirst.marketmanage.service.PurchaseService;
+import com.csfirst.marketmanage.service.SupplierService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,10 @@ public class PurchaseController {
 
     @Autowired
     private PurchaseService purchaseService;
+    @Autowired
+    private SupplierService supplierService;
+    @Autowired
+    private ProductService productService;
 
     @GetMapping("/page")
     public Result<Page<Purchase>> select(Long page, Long pageSize, String name) {
@@ -28,6 +34,12 @@ public class PurchaseController {
         lbw.like(StringUtils.isNotEmpty(name), Purchase::getPurchaseNo, name);
         lbw.orderByDesc(Purchase::getPurchaseId);
         purchaseService.page(pageInfo, lbw);
+        //把相应的供应商编号 商品编号
+        //变成相应的供应商名称 商品名称
+        pageInfo.getRecords().forEach(record -> {
+            record.setSupplierId(supplierService.getById(record.getSupplierId()).getSupplierName());
+            record.setProdId(productService.getById(record.getProdId()).getProdName());
+        });
         return Result.success(pageInfo);
     }
 

@@ -22,7 +22,7 @@
         <div class="tableBar">
             <el-input
                     v-model="input"
-                    placeholder="请输入销售订单号"
+                    placeholder="请输入客户姓名"
                     style="width: 250px"
                     clearable
                     @keyup.enter.native="handleQuery"
@@ -132,7 +132,6 @@
         computed: {},
         created() {
             this.init()
-            this.user = JSON.parse(localStorage.getItem('userInfo')).username
         },
         mounted() {
         },

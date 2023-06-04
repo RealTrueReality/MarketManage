@@ -44,13 +44,7 @@
 
   // 响应拦截器
   service.interceptors.response.use(res => {
-      if (res.data.code === 0 && res.data.msg === 'NOTLOGIN') {// 返回登录页面
-        console.log('---/backend/page/login/login.html---')
-        localStorage.removeItem('userInfo')
-        window.top.location.href = '/backend/page/login/login.html'
-      } else {
         return res.data
-      }
     },
     error => {
       console.log('err' + error)
@@ -62,7 +56,7 @@
         message = "系统接口请求超时";
       }
       else if (message.includes("Request failed with status code")) {
-        message = "系统接口" + message.substr(message.length - 3) + "异常";
+        message = "无法进行该操作，请检查外键约束!~";
       }
       window.ELEMENT.Message({
         message: message,

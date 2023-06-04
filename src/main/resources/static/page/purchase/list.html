@@ -52,7 +52,7 @@
             ></el-table-column>
             <el-table-column
                     prop="supplierId"
-                    label="供应商编号"
+                    label="供应商名称"
             ></el-table-column>
             <el-table-column
                     prop="purchaseDate"
@@ -60,7 +60,7 @@
             ></el-table-column>
             <el-table-column
                     prop="prodId"
-                    label="商品编号"
+                    label="商品名称"
             ></el-table-column>
             <el-table-column
                     prop="purchaseQuantity"
@@ -132,7 +132,6 @@
         computed: {},
         created() {
             this.init()
-            this.user = JSON.parse(localStorage.getItem('userInfo')).username
         },
         mounted() {
         },

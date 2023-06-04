@@ -22,8 +22,8 @@ public class Purchase {
     private int purchaseId;
     private String purchaseNo;
     private LocalDate purchaseDate;
-    private int supplierId;
-    private int prodId;
+    private String supplierId;
+    private String prodId;
     private int purchaseQuantity;
     private BigDecimal purchasePrice;
 }

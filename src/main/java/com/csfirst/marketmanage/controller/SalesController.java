@@ -3,11 +3,11 @@ package com.csfirst.marketmanage.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.csfirst.marketmanage.common.Result;
+import com.csfirst.marketmanage.entity.Customer;
 import com.csfirst.marketmanage.entity.Sales;
 import com.csfirst.marketmanage.service.CustomerService;
 import com.csfirst.marketmanage.service.ProductService;
 import com.csfirst.marketmanage.service.SalesService;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +31,13 @@ public class SalesController {
     public Result<Page<Sales>> select(Long page, Long pageSize, String name) {
         Page<Sales> pageInfo = new Page<>(page, pageSize);
         LambdaQueryWrapper<Sales> lbw = new LambdaQueryWrapper<>();
-        lbw.like(StringUtils.isNotEmpty(name), Sales::getSalesNo, name);
+        LambdaQueryWrapper<Customer> custbw = new LambdaQueryWrapper<>();
+        if (name != null) {
+            Customer one = customerService.getOne(custbw.eq(Customer::getCustName, name));
+            lbw.eq(Sales::getCustId, one.getCustId());
+        }
+
+
         lbw.orderByDesc(Sales::getSalesId);
         salesService.page(pageInfo, lbw);
         //把custId和prodId在对应表中找到然后变成相应的姓名和商品名称

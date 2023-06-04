@@ -20,5 +20,5 @@ public class Employee {
     private String empName;
     private String empEmail;
     private String empContact;
-    private int storeId;
+    private String storeId;
 }

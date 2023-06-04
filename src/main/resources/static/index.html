@@ -173,10 +173,6 @@
         },
         computed: {},
         created() {
-            const userInfo = window.localStorage.getItem('userInfo')
-            if (userInfo) {
-                this.userInfo = JSON.parse(userInfo)
-            }
             this.closeLoading()
         },
         beforeDestroy() {

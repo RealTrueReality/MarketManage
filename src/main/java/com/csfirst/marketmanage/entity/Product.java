@@ -22,5 +22,5 @@ public class Product {
     private String prodName;
     private String prodCategory;
     private BigDecimal prodPrice;
-    private int supplierId;
+    private String supplierId;
 }

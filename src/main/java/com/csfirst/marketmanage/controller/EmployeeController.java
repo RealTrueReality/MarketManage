@@ -3,15 +3,12 @@ package com.csfirst.marketmanage.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.csfirst.marketmanage.common.Result;
-import com.csfirst.marketmanage.entity.Customer;
 import com.csfirst.marketmanage.entity.Employee;
-import com.csfirst.marketmanage.service.CustomerService;
 import com.csfirst.marketmanage.service.EmployeeService;
+import com.csfirst.marketmanage.service.StoreService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author TrueReality
@@ -24,14 +21,21 @@ public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
+    @Autowired
+    private StoreService storeService;
 
     @GetMapping("/page")
-    public Result<Page<Employee>> select(Long page, Long pageSize,String name) {
+    public Result<Page<Employee>> select(Long page, Long pageSize, String name) {
         Page<Employee> pageInfo = new Page<>(page, pageSize);
         LambdaQueryWrapper<Employee> lbw = new LambdaQueryWrapper<>();
-        lbw.like(StringUtils.isNotEmpty(name),Employee::getEmpName,name);
+        lbw.like(StringUtils.isNotEmpty(name), Employee::getEmpName, name);
         lbw.orderByDesc(Employee::getEmpId);
         employeeService.page(pageInfo, lbw);
+        //把商店编号变成相应表里的相应商店名称
+        pageInfo.getRecords().forEach(record -> {
+            record.setStoreId(storeService.getById(record.getStoreId()).getStoreName());
+        });
+
         return Result.success(pageInfo);
     }
 
